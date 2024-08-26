@@ -1,0 +1,35 @@
+function sendEmails() {
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+  var data = sheet.getDataRange().getValues();
+
+  for (var i = 1; i < data.length; i++) {
+    var emailAddress = data[i][1]; // Change the index to 2 for column C
+    var classroomCode = "YOUR_CLASSROOM_CODE"; // Replace with actual Classroom code
+    var introductionMessage = "Welcome to the course!"; // Customize your introduction message
+
+    var message = "Dear student,\n\n" +
+                  "Welcome to the course!\n\n" +
+                  "Your Google Classroom code is: " + classroomCode + "\n\n" +
+                  introductionMessage + "\n\n" +
+                  "Best regards,\n" +
+                  "Your Instructor";
+
+    try {
+      // Check if emailAddress is valid
+      if (emailAddress && emailAddress.includes('@')) {
+        // Send the email
+        MailApp.sendEmail({
+          to: emailAddress,
+          subject: 'Welcome to the Course!',
+          body: message
+        });
+        Logger.log("Email sent successfully to: " + emailAddress);
+      } else {
+        Logger.log("Invalid email address: " + emailAddress);
+      }
+    } catch (e) {
+      Logger.log("Failed to send email to: " + emailAddress);
+      Logger.log("Error: " + e.toString());
+    }
+  }
+}
